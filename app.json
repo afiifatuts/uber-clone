@@ -1,6 +1,6 @@
 {
   "expo": {
-    "name": "uber-clone",
+    "name": "Uber-clone",
     "slug": "uber-clone",
     "version": "1.0.0",
     "orientation": "portrait",
@@ -10,7 +10,7 @@
     "splash": {
       "image": "./assets/images/splash.png",
       "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
+      "backgroundColor": "#2f80ed"
     },
     "ios": {
       "supportsTablet": true
