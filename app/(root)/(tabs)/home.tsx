@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import * as Location from 'expo-location';
 import {
   ActivityIndicator,
   FlatList,
@@ -124,27 +125,44 @@ const recentRids = [
 ];
 
 const Home = () => {
-  const {setUserLocation,setDestinationLocation } = useLocationStore();
+  const { setUserLocation, setDestinationLocation } = useLocationStore();
   const { user } = useUser();
   const loading = true;
 
-  const [hasPermission, setHasPermission] = useState(false)
+  const [hasPermission, setHasPermission] = useState(false);
 
   const handleSignOut = () => {};
   const handleDestinationPress = () => {};
-  
+
   useEffect(() => {
     const requestLocation = async () => {
-      
-    }
-    
-  
-    return () => {
-      
-    }
-  }, [])
-  
-  
+      let { status } = await Location.requestForegroundPermissionsAsync();
+
+      if (status !== 'granted') {
+        setHasPermission(false);
+        return;
+      }
+      let location = await Location.getCurrentPositionAsync();
+      const address = await Location.reverseGeocodeAsync({
+        latitude: location.coords?.latitude!,
+        longitude: location.coords?.longitude!,
+      });
+
+      setUserLocation({
+        // latitude:location.coords?.latitude,
+        // longitude:location.coords?.longitude,
+        latitude: 37.78825,
+        longitude: -122.4324,
+
+        address: `${address[0].name}, ${address[0].region}`,
+      });
+    };
+
+    requestLocation();
+
+    return () => {};
+  }, []);
+
   return (
     <SafeAreaView className="bg-general-500">
       <FlatList
@@ -205,8 +223,8 @@ const Home = () => {
             </>
 
             <Text className="text-xl font-JakartaBold mt-5 mb-3">
-                Recent Rides
-              </Text>
+              Recent Rides
+            </Text>
           </>
         )}
       />
